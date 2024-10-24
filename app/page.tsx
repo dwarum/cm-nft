@@ -3,11 +3,15 @@
 import Image from "next/image";
 
 // react imports
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import React from 'react';
+import {toast} from 'react-toastify';
+
+//style imports
+require('./mint.css'); 
 
 // solana imports
-import { Connection, Transaction, PublicKey, sendAndConfirmTransaction, clusterApiUrl } from '@solana/web3.js';
+import { Connection, Transaction, PublicKey, sendAndConfirmTransaction, clusterApiUrl, TransactionMessage } from '@solana/web3.js';
 
 // solana imports
 // plugin imports
@@ -20,19 +24,28 @@ import { setComputeUnitLimit } from '@metaplex-foundation/mpl-toolbox';
 
 // umi imports
 import { dateTime, publicKey, sol } from '@metaplex-foundation/umi';
-import { some, generateSigner, transactionBuilder } from "@metaplex-foundation/umi";
+import { isSome, some, generateSigner, transactionBuilder } from "@metaplex-foundation/umi";
 import { createUmi } from '@metaplex-foundation/umi-bundle-defaults';
 import { walletAdapterIdentity } from '@metaplex-foundation/umi-signer-wallet-adapters';
 
 // das imports
 import {dasApi} from '@metaplex-foundation/digital-asset-standard-api';
+import { Console } from "console";
 
 
 
-export default function Home() {
+export default function Home() { 
   const { connect, connected } = useWallet();
-  const [balance, setBalance] = useState<number | null>(null);
   const {setVisible} = useWalletModal();
+  const [balance, setBalance] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [nftPrice, setNftPrice] = useState(0);// Example: 0.2 SOL
+  const [botTax, setBotTax] = useState(0); // Example: 0.01 SOL
+  const [networkFee, setNetworkFee] = useState(0); // Example: 0.005 SOL
+  const [error, setError] = useState<string | null>(null);
+
+  const estimatedCost = (nftPrice + botTax + networkFee).toFixed(6);
+  
   const [nftAddress, setNftAddress] = useState<string | null>(null);
   const [minting, setMinting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // State for image file
@@ -53,8 +66,35 @@ export default function Home() {
   const wallet = useWallet();
   const connection = new Connection(clusterApiUrl('devnet'));
 
-  useEffect(() =>{
-    const fetchBalance = async () => {
+  
+  // initialize umi with Devnet endpoint and connect the user's wallet to umi
+  const umi = createUmi(clusterApiUrl('devnet')); 
+  umi.use(walletAdapterIdentity(wallet));
+  umi.use(mplCandyMachine());
+  umi.use(dasApi());
+
+  // Function to fetch Account Balance
+//   useEffect(() =>{
+//     const fetchBalance = async () => {
+//     if(wallet && !connected){
+//       connect().catch((err) => console.error("Wallet Connection Failed", err));
+//     }
+//     else if(wallet.publicKey && connected){
+//       try{
+//         const lamports = await connection.getBalance(wallet.publicKey);
+//         setBalance(lamports/1e9);
+//       }
+//       catch(error){
+//         console.error('Failed to fetch balance:', error);
+//         setBalance(null);
+//       }
+//     }
+//   }
+//   fetchBalance();
+// },[wallet, connected, connect]);
+
+  const fetchBalance = useCallback(async() =>{
+
     if(wallet && !connected){
       connect().catch((err) => console.error("Wallet Connection Failed", err));
     }
@@ -68,19 +108,14 @@ export default function Home() {
         setBalance(null);
       }
     }
-  }
-  fetchBalance();
-},[wallet, connected, connect]);
-  
-  // initialize umi with Devnet endpoint and connect the user's wallet to umi
-  const umi = createUmi(clusterApiUrl('devnet')); 
-  umi.use(walletAdapterIdentity(wallet));
-  umi.use(mplCandyMachine());
-  umi.use(dasApi());
+  },[wallet, connected, connect, wallet.publicKey]);
 
-  
+  useEffect(() => {
+    fetchBalance();
+  }, [fetchBalance]);
+
   // Function to fetch the Candy Machine state
-  const fetchMintStats = async () => {
+  const fetchMintStats = useCallback(async () => {
     try {
       const candyMachine = await fetchCandyMachine(umi, candyMachineId);
       
@@ -91,32 +126,131 @@ export default function Home() {
     } catch (error) {
       console.error('Error fetching mint stats:', error);
     }
-  };
+  },[umi, candyMachineId]);
 
   // Poll every 5 seconds to keep stats up to date
   useEffect(() => {
     fetchMintStats();
     const interval = setInterval(fetchMintStats, 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchMintStats]);
 
+  // Function to fetch Mint Details
+  useEffect(()=>{
+    const fetchFees = async () =>{
+      const {nftPrice, botTax} = await fetchCandyData();
+      setNftPrice(nftPrice);
+      setBotTax(botTax);
+
+      if(wallet.publicKey){
+       const networkFee = await fetchNetworkFee(wallet.publicKey!);
+       setNetworkFee(networkFee);
+      }
+    }
+    fetchFees();
+  },[wallet.publicKey]);
+
+  const fetchCandyData = async () => {
+    try {
+      // Fetch the Candy Machine and Candy Guard once
+      const candyMachine = await fetchCandyMachine(umi, candyMachineId);
+      if (!candyMachine) throw new Error('Candy Machine not found');
   
+      const candyGuard = await safeFetchCandyGuard(umi, candyMachine.mintAuthority);
+      if (!candyGuard) throw new Error('Candy Guard not found or unauthorized');
+  
+      console.log('Fetched Candy Machine and Candy Guard:', candyMachine, candyGuard);
+  
+      // Extract NFT Price (from solPayment)
+      const solPayment = candyGuard?.guards.solPayment;
+      const nftPrice = isSome(solPayment) ?  Number(solPayment.value.lamports.basisPoints) / 1e9 : 0; // Convert to SOL
+  
+      // Extract Mint Fee (from botTax)
+      const botTaxFee = candyGuard?.guards.botTax;
+      const botTax = isSome(botTaxFee) ? Number(botTaxFee.value.lamports.basisPoints) / 1e9 : 0; // Convert to SOL
+  
+      return { nftPrice, botTax };
+    } catch (error) {
+      console.error('Error fetching candy data:', error);
+      return { nftPrice: 0, botTax: 0 };
+    }
+  };
+
+  const fetchNetworkFee = async (walletPublicKey: PublicKey) => {
+    try {
+      // Create an empty transaction (or replace with your actual minting instructions)
+      const transaction = new Transaction();
+  
+      // Add recent blockhash to the transaction (required)
+      const { blockhash } = await connection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+  
+      // Set the fee payer (the wallet initiating the transaction)
+      transaction.feePayer = walletPublicKey;
+  
+      // Get the estimated fee in lamports
+    const feeInLamports = await connection.getFeeForMessage(transaction.compileMessage());
+
+    // Convert to SOL and keep more decimal places
+    const feeInSOL = (feeInLamports.value! / 1e9);
+
+    return feeInSOL;
+    } catch (error) {
+      console.error('Error fetching network fee:', error);
+      return 0;
+    }
+  };
+  
+  // handle mint
+  const handleMint = async () =>{
+    if (loading) return; // prevent multiple clicks
+    
+    try{
+      setLoading(true); // start loading
+
+      // Check if wallet has enough balance
+      //const balance = await fetchBalance();
+      if (balance && balance < parseFloat("estimatedCost")) {
+        toast.error(`Insufficient balance! You need at least ${estimatedCost} SOL to mint.`);
+        return;
+      }
+
+      await mint(); //call mint function
+      //await fetchMintStats(); // Ensure stats update after mint
+      toast.success('Mint successful! Check your collectibles section in your wallet.');
+    }
+    catch (error:any) {
+      console.error('Minting failed:', error);
+      toast.error('Minting failed. Please try again');
+    }
+    finally{
+      setLoading(false);
+    }
+  };
 
   // function to mint NFT
   const mint = async () =>{
-    
-    console.log("mint button clicked");
+
+    // open wallet modal if not connected
     if (!wallet.publicKey) {
-      setVisible(true);
+      setVisible(true); 
       return;
     }
-    
+
+
     try{
       console.log("Fetching Candy Machine and Candy Guard");
 
       // Fetch the Candy Machine and Candy Guard.
       const candyMachine = await fetchCandyMachine(umi, candyMachineId);
+      if (!candyMachine) {
+        throw new Error('Candy Machine not found');
+      }
+
       const candyGuard = await safeFetchCandyGuard(umi, candyMachine.mintAuthority);
+      if (!candyGuard) {
+        throw new Error('Candy Guard not found or unauthorized');
+      }
       console.log("mint auth", candyMachine.mintAuthority);
     
       console.log('Starting NFT mint...');
@@ -144,11 +278,26 @@ export default function Home() {
 
       console.log('Mint successful! Transaction ID:', tx);
       console.log('NFT Mint Address:', nftMint.publicKey);
+      await fetchMintStats();
     }
-    catch(error){
-      console.log("Minting failed:", error);
+    catch(error: any){
+      // Enhanced error handling with specific messages
+    if (error.message.includes('Candy Machine not found')) {
+      console.error('Error: Failed to fetch Candy Machine. Please try again later.');
+    } else if (error.message.includes('Candy Guard not found')) {
+      console.error('Error: Candy Guard could not be fetched. Ensure it is correctly configured.');
+    } else if (error.message.includes('Network request failed')) {
+      console.error('Network error: Please check your internet connection.');
+    } else {
+      console.error('Minting failed:', error);
     }
+
+    // Optionally, display a user-friendly message (e.g., toast notification)
+    console.log('Minting failed: ' + error.message);
+    toast.error('Minting failed. Please try again');
   }
+    }
+  
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
@@ -208,18 +357,46 @@ export default function Home() {
           >
             Read our docs
           </a>
+          </div>
+          <div className="mint-section">
+      {/* Display NFT price, mint fee, and protocol fee */}
+      <div className="mint-details">
+        <div className="detail-row">
+          <span>Total Minted:</span><span>{itemsRedeemed} / {itemsAvailable} </span>
+        </div>
+        <div className="detail-row">
+          <span>NFT Price:</span> <span>{nftPrice} SOL</span>
+        </div>
+        <div className="detail-row">
+          <span>Bot Tax:</span> <span>{botTax} SOL</span>
+        </div>
+        <div className="detail-row">
+          <span>Network Fee:</span> <span>{networkFee} SOL</span>
+        </div>
+        <div className="detail-row total-fee">
+          <strong>Estimated Cost:</strong> 
+          <strong>{estimatedCost} SOL</strong>
+        </div>
+      </div>
 
-          <button
+      {/* Mint Button */}
+      <button onClick={handleMint} className="mint-button" disabled={loading}>
+      {connected ? loading ? 'Minting...' : 'MINT' : 'CONNECT WALLET'}
+      </button>
+     
+    </div>
+
+          {/* <button
             className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
             rel="noopener noreferrer"
-            onClick={mint}
+            onClick={handleMint} disabled={loading}
           >
-           {connected ? 'MINT' : 'CONNECT WALLET'}
+           {connected ? loading ? 'Minting...' : 'MINT' : 'CONNECT WALLET'}
           </button>
           <p>
             {itemsRedeemed} / {itemsAvailable} NFTs minted
-          </p>
-        </div>
+          </p> */}
+       
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
