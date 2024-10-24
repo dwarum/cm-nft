@@ -12,7 +12,7 @@ import { Connection, Transaction, PublicKey, sendAndConfirmTransaction, clusterA
 // solana imports
 // plugin imports
 import { useWallet } from '@solana/wallet-adapter-react';
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { WalletMultiButton,useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 // metaplex imports
 import { mintV2, mplCandyMachine, fetchCandyMachine, safeFetchCandyGuard, create } from '@metaplex-foundation/mpl-candy-machine';
@@ -30,7 +30,9 @@ import {dasApi} from '@metaplex-foundation/digital-asset-standard-api';
 
 
 export default function Home() {
-  const { connected, signTransaction } = useWallet();
+  const { connect, connected } = useWallet();
+  const [balance, setBalance] = useState<number | null>(null);
+  const {setVisible} = useWalletModal();
   const [nftAddress, setNftAddress] = useState<string | null>(null);
   const [minting, setMinting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // State for image file
@@ -49,13 +51,32 @@ export default function Home() {
 
   // access user's connected wallet
   const wallet = useWallet();
+  const connection = new Connection(clusterApiUrl('devnet'));
+
+  useEffect(() =>{
+    const fetchBalance = async () => {
+    if(wallet && !connected){
+      connect().catch((err) => console.error("Wallet Connection Failed", err));
+    }
+    else if(wallet.publicKey && connected){
+      try{
+        const lamports = await connection.getBalance(wallet.publicKey);
+        setBalance(lamports/1e9);
+      }
+      catch(error){
+        console.error('Failed to fetch balance:', error);
+        setBalance(null);
+      }
+    }
+  }
+  fetchBalance();
+},[wallet, connected, connect]);
   
   // initialize umi with Devnet endpoint and connect the user's wallet to umi
   const umi = createUmi(clusterApiUrl('devnet')); 
   umi.use(walletAdapterIdentity(wallet));
   umi.use(mplCandyMachine());
   umi.use(dasApi());
-
 
   
   // Function to fetch the Candy Machine state
@@ -79,12 +100,14 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  
+
   // function to mint NFT
   const mint = async () =>{
     
     console.log("mint button clicked");
     if (!wallet.publicKey) {
-      console.error('Wallet not connected');
+      setVisible(true);
       return;
     }
     
@@ -149,7 +172,16 @@ export default function Home() {
         </ol>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
+        {connected && wallet.publicKey ? (
+        <div className="flex items-center gap-2" >
           <WalletMultiButton/>
+          <span style={{color: '#512da8', fontWeight: 'bold'}}>
+           {balance !== null ? `${balance.toFixed(2)} SOL` : '0 SOL'} 
+          </span>
+        </div>
+      ) : (
+        <WalletMultiButton />
+      )}
           </div>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
@@ -182,7 +214,7 @@ export default function Home() {
             rel="noopener noreferrer"
             onClick={mint}
           >
-            MINT
+           {connected ? 'MINT' : 'CONNECT WALLET'}
           </button>
           <p>
             {itemsRedeemed} / {itemsAvailable} NFTs minted
