@@ -6,15 +6,15 @@ import Image from "next/image";
 import { useState, useEffect, useCallback } from 'react';
 import React from 'react';
 import {toast} from 'react-toastify';
+import Confetti from 'react-confetti';
 
 //style imports
 require('./mint.css'); 
 
 // solana imports
 import { Connection, Transaction, PublicKey, sendAndConfirmTransaction, clusterApiUrl, TransactionMessage } from '@solana/web3.js';
+import bs58 from 'bs58';
 
-// solana imports
-// plugin imports
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton,useWalletModal } from "@solana/wallet-adapter-react-ui";
 
@@ -30,32 +30,28 @@ import { walletAdapterIdentity } from '@metaplex-foundation/umi-signer-wallet-ad
 
 // das imports
 import {dasApi} from '@metaplex-foundation/digital-asset-standard-api';
-import { Console } from "console";
-
-
 
 export default function Home() { 
   const { connect, connected } = useWallet();
   const {setVisible} = useWalletModal();
   const [balance, setBalance] = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [minting, setMinting] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const [nftPrice, setNftPrice] = useState(0);// Example: 0.2 SOL
   const [botTax, setBotTax] = useState(0); // Example: 0.01 SOL
   const [networkFee, setNetworkFee] = useState(0); // Example: 0.005 SOL
+  const [mintClosed, setMintClosed] = useState(false); // Track mint status
   const [error, setError] = useState<string | null>(null);
 
   const estimatedCost = (nftPrice + botTax + networkFee).toFixed(6);
   
   const [nftAddress, setNftAddress] = useState<string | null>(null);
-  const [minting, setMinting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // State for image file
 
-  // const candyMachineId = publicKey('2i1AefAX6SFpdbqfUWucEZCrmegxoXZSsFpJeWTPko3E');
-  // const collectionMintId = publicKey('y8G3BTR7Fj4xywa5K5DXq3aHhoaCqCJvUuQ9hL6cpb8');
-  // const collectionUpdateAuthority = publicKey('A5PcHcK4HEStR3p7VspBLkM8ucqfkyWMQUUHiM4ThQWx');
+  // Candy Guard Id: 9qwfkWfdnq7Tvc9DQn4L4yveBbjSxPCc1WnVYjwMvXup
 
-  const candyMachineId = publicKey('FjALX2yxr7T1yv9ARcW2QDb1kESMHsAsGYM6juiopSGa');
-  const collectionMintId = publicKey('B9yJ6fb1eBGzgRwain1iaEw457UZCJVUwz5Uuee6FEVW');
+  const candyMachineId = publicKey('ct4ZXaeZ4kymr29VWFKZXFgJkqP6NfRYvuDREQ3gEBT');
+  const collectionMintId = publicKey('DLLUzHTc513Y4prryh5JKuHC2CzhXUB65RoZa9qqQNWH');
   const collectionUpdateAuthority = publicKey('A5PcHcK4HEStR3p7VspBLkM8ucqfkyWMQUUHiM4ThQWx');
 
   // stats
@@ -66,6 +62,8 @@ export default function Home() {
   const wallet = useWallet();
   const connection = new Connection(clusterApiUrl('devnet'));
 
+  //variable to store toast messages
+  let toastId: any;
   
   // initialize umi with Devnet endpoint and connect the user's wallet to umi
   const umi = createUmi(clusterApiUrl('devnet')); 
@@ -73,32 +71,20 @@ export default function Home() {
   umi.use(mplCandyMachine());
   umi.use(dasApi());
 
-  // Function to fetch Account Balance
-//   useEffect(() =>{
-//     const fetchBalance = async () => {
-//     if(wallet && !connected){
-//       connect().catch((err) => console.error("Wallet Connection Failed", err));
-//     }
-//     else if(wallet.publicKey && connected){
-//       try{
-//         const lamports = await connection.getBalance(wallet.publicKey);
-//         setBalance(lamports/1e9);
-//       }
-//       catch(error){
-//         console.error('Failed to fetch balance:', error);
-//         setBalance(null);
-//       }
-//     }
-//   }
-//   fetchBalance();
-// },[wallet, connected, connect]);
 
   const fetchBalance = useCallback(async() =>{
 
     if(wallet && !connected){
-      connect().catch((err) => console.error("Wallet Connection Failed", err));
+      try {
+        await connect(); // Connect the wallet if not connected
+        console.log('Wallet connected.');
+      } catch (error) {
+        console.error('Wallet connection failed:', error);
+        toast.error('Failed to connect wallet.');
+        return; // Exit if connection fails
+      }
     }
-    else if(wallet.publicKey && connected){
+    if(wallet.publicKey && connected){
       try{
         const lamports = await connection.getBalance(wallet.publicKey);
         setBalance(lamports/1e9);
@@ -106,12 +92,13 @@ export default function Home() {
       catch(error){
         console.error('Failed to fetch balance:', error);
         setBalance(null);
+        toast.error('Failed to update wallet balance.');
       }
     }
   },[wallet, connected, connect, wallet.publicKey]);
 
   useEffect(() => {
-    fetchBalance();
+    fetchBalance(); // call fetchBalance on wallet change
   }, [fetchBalance]);
 
   // Function to fetch the Candy Machine state
@@ -119,16 +106,22 @@ export default function Home() {
     try {
       const candyMachine = await fetchCandyMachine(umi, candyMachineId);
       
-      console.log("Candy MC", candyMachine);
+      //console.log("Candy MC", candyMachine);
       // NFTs minted so far
       setItemsAvailable(candyMachine.itemsLoaded);
       setItemsRedeemed(Number(candyMachine.itemsRedeemed));
+
+      // Check if all NFTs are minted
+      if (candyMachine.itemsRedeemed >= candyMachine.itemsLoaded) {
+        setMintClosed(true); // Disable minting
+      }
+
     } catch (error) {
       console.error('Error fetching mint stats:', error);
     }
   },[umi, candyMachineId]);
 
-  // Poll every 5 seconds to keep stats up to date
+  // Poll every 10 seconds to keep stats up to date
   useEffect(() => {
     fetchMintStats();
     const interval = setInterval(fetchMintStats, 10000);
@@ -201,43 +194,132 @@ export default function Home() {
     }
   };
   
-  // handle mint
-  const handleMint = async () =>{
-    if (loading) return; // prevent multiple clicks
-    
-    try{
-      setLoading(true); // start loading
 
-      // Check if wallet has enough balance
-      //const balance = await fetchBalance();
-      if (balance && balance < parseFloat("estimatedCost")) {
-        toast.error(`Insufficient balance! You need at least ${estimatedCost} SOL to mint.`);
-        return;
-      }
+  // Call this function after mint success
+  const handleMintSuccess = async (transactionSignature:any) => {
+    try {
+      // Use `connection.confirmTransaction()` to ensure the transaction is finalized
+      const latestBlockhash = await connection.getLatestBlockhash();
+      await connection.confirmTransaction(
+        { signature: transactionSignature, ...latestBlockhash },
+        'finalized' // Wait for finalization
+      );
+  
+      console.log('Transaction confirmed! Fetching updated balance...');
 
-      await mint(); //call mint function
-      //await fetchMintStats(); // Ensure stats update after mint
-      toast.success('Mint successful! Check your collectibles section in your wallet.');
-    }
-    catch (error:any) {
-      console.error('Minting failed:', error);
-      toast.error('Minting failed. Please try again');
-    }
-    finally{
-      setLoading(false);
+      // Fetch the updated balance and refresh mint stats after confirmation
+      await fetchBalance(); 
+      await fetchMintStats();
+
+    } catch (error) {
+      console.error('Error confirming transaction:', error);
+      // Update the toast to show mint success message
+        toast.update(toastId, {
+          render: 'Failed to confirm transaction. Please try again',
+          type: 'error',
+          autoClose: 2000, // Auto-close after 2 seconds
+        });
     }
   };
 
-  // function to mint NFT
-  const mint = async () =>{
-
+  // handle mint
+  const handleMint = async () =>{
     // open wallet modal if not connected
     if (!wallet.publicKey) {
       setVisible(true); 
       return;
     }
+    // prevent multiple clicks
+    if (minting || mintClosed) return; 
+    
+    try{
+      // start minting
+      setMinting(true); 
 
+      // Check if wallet has enough balance
+      //const balance = await fetchBalance();
+      if (balance && balance < parseFloat(estimatedCost)) {
+        toast.error(`Insufficient balance! You need at least ${estimatedCost} SOL to mint.`);
+        return;
+      }
 
+      // Show a toast with minting in progress message
+      toastId = toast.info('Minting in progress...', { autoClose: false });
+
+      const { transactionSignature, mintAddress } = await mint();  //call mint function
+
+      // show confetti, success toast 
+      if(transactionSignature && mintAddress) {
+        // Update the existing toast to show confirmation message
+        toast.update(toastId, {
+          render: 'Confirming transaction...',
+          type: 'info',
+          autoClose: false, // Keep it open until confirmation completes
+        });
+
+        // confirm transaction and fetch updated balance
+        await handleMintSuccess(transactionSignature);
+
+        // Update the toast to show mint success message
+        toast.update(toastId, {
+          render: 'Mint successful! Check your wallet.',
+          type: 'success',
+          autoClose: 5000, // Auto-close after 5 seconds
+        });
+
+        setShowConfetti(true);
+        // stop confetti after 5 seconds and open wallet url
+        setTimeout(() => {
+          setShowConfetti(false); 
+          openWallet(mintAddress);
+        },3000); 
+      }
+      else{
+        // Update the toast to show mint success message
+        toast.update(toastId, {
+          render: 'Mint failed. Please try again',
+          type: 'error',
+          autoClose: 1000, // Auto-close after 2 seconds
+        });
+      }
+    }
+    catch (error:any) {
+      console.error('Mint failed:', error);
+      let toastMessage = 'Mint failed. Please try again'
+
+      if (error.message.includes('MissingRemainingAccount')) {
+        toastMessage = 'All NFTs have been minted. Mints are now closed';
+        setMintClosed(true); // Disable further minting attempts
+      }
+      // Update the toast to show the error message
+      toast.update(toastId, {
+        render: toastMessage,
+        type: 'error', // Use string type instead of toast.TYPE.ERROR
+        autoClose: 1000, // Auto-close after 5 seconds
+      });
+    }
+    finally{
+      setMinting(false);
+    }
+  };
+  // Open Phantom Wallet URL (Triggered directly from button click)
+  const openWallet = (mintAddress:any) => {
+    const walletName = wallet?.wallet?.adapter?.name.toLowerCase(); // Detect connected wallet
+      let walletUrl;
+      if (walletName?.includes('phantom')) {
+        walletUrl = `https://phantom.app/ul/browse/mint/${mintAddress}`;
+      } else if (walletName?.includes('solflare')) {
+        walletUrl = `https://solflare.com/nft/${mintAddress}`;
+      } else {
+        toast.info('Please check your wallet for the minted NFT.');
+        return;
+      }
+
+    window.open(walletUrl, '_blank'); // Open in a new tab
+  };
+
+  // function to mint NFT
+  const mint = async () =>{
     try{
       console.log("Fetching Candy Machine and Candy Guard");
 
@@ -276,9 +358,9 @@ export default function Home() {
       )
       .sendAndConfirm(umi,{confirm:{commitment: "confirmed"}});
 
-      console.log('Mint successful! Transaction ID:', tx);
       console.log('NFT Mint Address:', nftMint.publicKey);
       await fetchMintStats();
+      return {transactionSignature: bs58.encode(tx.signature), mintAddress: nftMint.publicKey};
     }
     catch(error: any){
       // Enhanced error handling with specific messages
@@ -291,111 +373,53 @@ export default function Home() {
     } else {
       console.error('Minting failed:', error);
     }
-
-    // Optionally, display a user-friendly message (e.g., toast notification)
-    console.log('Minting failed: ' + error.message);
-    toast.error('Minting failed. Please try again');
+    return {transactionSignature: null, mintAddress: null};
   }
     }
   
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
-        {connected && wallet.publicKey ? (
-        <div className="flex items-center gap-2" >
-          <WalletMultiButton/>
-          <span style={{color: '#512da8', fontWeight: 'bold'}}>
-           {balance !== null ? `${balance.toFixed(2)} SOL` : '0 SOL'} 
-          </span>
-        </div>
-      ) : (
-        <WalletMultiButton />
-      )}
-          </div>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {connected && wallet.publicKey ? (
+              <div className="flex items-center gap-2" >
+                <WalletMultiButton/>
+                <span style={{color: '#512da8', fontWeight: 'bold'}}>
+                {balance !== null ? `${balance.toFixed(2)} SOL` : '0 SOL'} 
+                </span>
+              </div>
+            ) : (
+              <WalletMultiButton />
+            )}
           </div>
           <div className="mint-section">
-      {/* Display NFT price, mint fee, and protocol fee */}
-      <div className="mint-details">
-        <div className="detail-row">
-          <span>Total Minted:</span><span>{itemsRedeemed} / {itemsAvailable} </span>
-        </div>
-        <div className="detail-row">
-          <span>NFT Price:</span> <span>{nftPrice} SOL</span>
-        </div>
-        <div className="detail-row">
-          <span>Bot Tax:</span> <span>{botTax} SOL</span>
-        </div>
-        <div className="detail-row">
-          <span>Network Fee:</span> <span>{networkFee} SOL</span>
-        </div>
-        <div className="detail-row total-fee">
-          <strong>Estimated Cost:</strong> 
-          <strong>{estimatedCost} SOL</strong>
-        </div>
-      </div>
-
-      {/* Mint Button */}
-      <button onClick={handleMint} className="mint-button" disabled={loading}>
-      {connected ? loading ? 'Minting...' : 'MINT' : 'CONNECT WALLET'}
-      </button>
-     
-    </div>
-
-          {/* <button
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            rel="noopener noreferrer"
-            onClick={handleMint} disabled={loading}
-          >
-           {connected ? loading ? 'Minting...' : 'MINT' : 'CONNECT WALLET'}
-          </button>
-          <p>
-            {itemsRedeemed} / {itemsAvailable} NFTs minted
-          </p> */}
+            {/**fee details */}
+            <div className="mint-details">
+              <div className="detail-row">
+                <span>Total Minted:</span><span>{itemsRedeemed} / {itemsAvailable} </span>
+              </div>
+              <div className="detail-row">
+                <span>NFT Price:</span> <span>{nftPrice} SOL</span>
+              </div>
+              <div className="detail-row">
+                <span>Bot Tax:</span> <span>{botTax} SOL</span>
+              </div>
+              <div className="detail-row">
+                <span>Network Fee:</span> <span>{networkFee} SOL</span>
+              </div>
+              <div className="detail-row total-fee">
+                <strong>Estimated Cost:</strong> 
+                <strong>{estimatedCost} SOL</strong>
+              </div>
+            </div>
+            {/**confetti */}
+            {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
+            {/** Mint Button  */}
+            <button onClick={handleMint} className="mint-button" disabled={minting || mintClosed}>
+            {mintClosed ? 'MINTS CLOSED' : connected ? 'MINT' : 'CONNECT WALLET'}
+            </button>
+          </div>
        
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">

@@ -1,6 +1,6 @@
 {
   "tokenStandard": "nft",
-  "number": 16,
+  "number": 32,
   "symbol": "NUMBERS",
   "sellerFeeBasisPoints": 500,
   "isMutable": true,
