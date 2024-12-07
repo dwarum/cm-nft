@@ -11,6 +11,15 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        slate:{
+          1000: '#191A1C'
+        },
+        yellow:{
+          1000:'#f0bb62'
+        },
+        gray:{
+          1000:'#a3a4a7'
+        }
       },
     },
   },

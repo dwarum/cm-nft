@@ -1,21 +1,16 @@
+import { useEffect } from "react";
+
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
 import { ToastContainer } from "react-toastify";
+
+import "./globals.css";
 import 'react-toastify/dist/ReactToastify.css';
 
-import WalletContextProvider from "./components/walletContextProvider";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+
+import WalletContextProvider from "./components/walletContextProvider";
+import Header from "./components/header";
+import Footer from "./components/footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -29,11 +24,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      {/* BLACK GRADIENT BACKGROUND */}
+      {/* <body className="relative bg-gradient-to-r from-slate-800 via-zinc-5-800 to-stone-800 p-8 rounded-lg shadow-lg"> */}
+      <body>
         {/** Wallet Context */}
         <WalletContextProvider>
+          <Header/>
         {/** Toast Container for notifications */}
         <ToastContainer 
             position="top-center"
@@ -47,6 +43,7 @@ export default function RootLayout({
           />
         {children}
         </WalletContextProvider>
+        <Footer/>
       </body>
     </html>
   );
