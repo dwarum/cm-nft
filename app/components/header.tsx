@@ -1,17 +1,41 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
-    const [isOpen, setIsOpen] = useState(false); // State for toggling the menu
+  const [isOpen, setIsOpen] = useState(false); // State for toggling the menu
+  const [isScrolled, setIsScrolled] = useState(false); // State for toggling the background of navbar
+  const pathname = usePathname();
+
+  //handle scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setIsScrolled(true);
+      }
+      else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const isWhitepaperPage = pathname === "/whitepaper";
+
   return (
-<nav className="px-4 py-3 fixed top-0 left-0 w-full z-50 shadow-md">
-      <div className="container mx-auto flex justify-between items-right">
+    <nav id="header" className={`px-4 py-3 fixed top-0 left-0 w-full z-50 ${
+      isWhitepaperPage ? "nav-scroll"
+      :
+      isScrolled ? 'nav-scroll' : 'bg-transparent'
+      }`}>
+      <div className="container mx-auto flex justify-between">
         {/* Logo */}
         <a className="navbar-brand" href="#">
-          <img src="images/logo.png" alt=""/></a> 
+
+          <img src="images/logo.png" alt="" /></a>
         {/* Hamburger Menu */}
         <button
           className="md:hidden focus:outline-none" onClick={() => setIsOpen(!isOpen)}>
@@ -31,59 +55,85 @@ export default function Header() {
           </svg>
         </button>
 
-        {/* Desktop Menu */}
-        <div className= "hidden md:flex md:items-center md:space-x-6">
-          <a href="#home" className="font-semibold text-sm text-white hover:text-yellow-1000" >
-            Home
-          </a>
-          <a href="#about" className="font-semibold text-sm text-white hover:text-yellow-1000">
+        <div className="hidden md:flex md:items-right md:space-x-20">
+
+          <div className="hidden md:flex md:items-center md:space-x-6">
+            <a href="/" className="text-md text-white hover:text-yellow-1000" >
+              Home
+            </a>
+            {/* <a href="#about" className="text-md text-white hover:text-yellow-1000">
             About
-          </a>
-          <a href="#services" className="font-semibold text-sm text-white hover:text-yellow-1000">
-            Features
-          </a>
-          <a href="#contact" className="font-semibold text-sm text-white hover:text-yellow-1000">
-            Whitepaper
-          </a>
-          <a href="#contact" className="font-semibold text-sm text-white hover:text-yellow-1000">
-            X
-          </a>
-          <a href="#contact" className="font-semibold text-sm text-white hover:text-yellow-1000">
-            Tel
-          </a>
-          <button className="font-semibold text-sm text-slate-1000 px-2 py-1 bg-yellow-1000 rounded-2xl ">
-            Connect Wallet
-          </button>
+          </a> */}
+            <a href="#services" className="text-md text-white hover:text-yellow-1000">
+              Features
+            </a>
+            <a href="/whitepaper" className="text-md text-white hover:text-yellow-1000">
+              Whitepaper
+            </a>
+          </div>
+
+          {/* Desktop Menu */}
+          <div className="hidden md:flex md:items-center md:space-x-6">
+            <a href="https://x.com/mystic">
+              <img
+                className="nav-social-logos"
+                src="images/x-twitter-brands-solid.svg"
+                alt="Link to Mystic AI Twitter"
+              />
+            </a>
+            <a href="https://t.me/MysticAIGroup">
+              <img
+                className="nav-social-logos"
+                src="images/telegram-brands-solid.svg"
+                alt="Link to Mystic AI Telegram"
+              />
+            </a>
+            <a href="https://mystic.ai/discord">
+              <img
+                className="nav-social-logos"
+                src="images/discord-brands-solid.svg"
+                alt="Link to Mystic AI Discord"
+              />
+            </a>
+            <a
+              className="btn group sm:w-auto bg-white text-black font-semibold text-sm 
+                    hover:bg-opacity-80 hover:text-black"
+              href="#intro"
+            >
+              <span className="relative inline-flex items-center">
+                Connect Wallet
+              </span>
+            </a>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
       <div
-        className={`${
-          isOpen ? "block" : "hidden"
-        } md:hidden flex flex-col space-y-2 mt-2`}
+        className={`${isOpen ? "block" : "hidden"
+          } md:hidden flex flex-col space-y-2 mt-2`}
       >
-        <a href="#home" className="font-semibold text-sm text-white hover:text-yellow-1000" >
-            Home
-          </a>
-          <a href="#about" className="font-semibold text-sm text-white hover:text-yellow-1000">
-            About
-          </a>
-          <a href="#services" className="font-semibold text-sm text-white hover:text-yellow-1000">
-            Features
-          </a>
-          <a href="#contact" className="font-semibold text-sm text-white hover:text-yellow-1000">
-            Whitepaper
-          </a>
-          <a href="#contact" className="font-semibold text-sm text-white hover:text-yellow-1000">
-            X
-          </a>
-          <a href="#contact" className="font-semibold text-sm text-white hover:text-yellow-1000">
-            Tel
-          </a>
-          <a href="#contact" className="font-semibold text-sm text-slate-1000">
-            Connect Wallet
-          </a>
+        <a href="#home" className="text-sm text-white hover:text-yellow-1000" >
+          Home
+        </a>
+        <a href="#about" className="text-sm text-white hover:text-yellow-1000">
+          About
+        </a>
+        <a href="#services" className="text-sm text-white hover:text-yellow-1000">
+          Features
+        </a>
+        <a href="#contact" className="text-sm text-white hover:text-yellow-1000">
+          Whitepaper
+        </a>
+        <a href="#contact" className="text-sm text-white hover:text-yellow-1000">
+          X
+        </a>
+        <a href="#contact" className="text-sm text-white hover:text-yellow-1000">
+          Tel
+        </a>
+        <a href="#contact" className="text-sm text-white">
+          Connect Wallet
+        </a>
       </div>
     </nav>
   );

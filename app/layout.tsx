@@ -1,12 +1,9 @@
-import { useEffect } from "react";
-
 import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
 
 import "./globals.css";
 import 'react-toastify/dist/ReactToastify.css';
-
-
+import "../public/css/themify-icons.css";
 
 import WalletContextProvider from "./components/walletContextProvider";
 import Header from "./components/header";
@@ -26,12 +23,12 @@ export default function RootLayout({
     <html lang="en">
       {/* BLACK GRADIENT BACKGROUND */}
       {/* <body className="relative bg-gradient-to-r from-slate-800 via-zinc-5-800 to-stone-800 p-8 rounded-lg shadow-lg"> */}
-      <body>
+      <body className="flex flex-col min-h-screen">
         {/** Wallet Context */}
         <WalletContextProvider>
-          <Header/>
-        {/** Toast Container for notifications */}
-        <ToastContainer 
+          <Header />
+          {/** Toast Container for notifications */}
+          <ToastContainer
             position="top-center"
             autoClose={3000}
             hideProgressBar={false}
@@ -41,9 +38,9 @@ export default function RootLayout({
             draggable
             pauseOnHover
           />
-        {children}
+          <main className="flex-grow">{children}</main> {/* Pushes footer to the bottom */}
         </WalletContextProvider>
-        <Footer/>
+        <Footer />
       </body>
     </html>
   );

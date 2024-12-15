@@ -1,38 +1,63 @@
 "use client";
 
-import Link from "next/link";
-
-
 export default function Footer() {
-    
-  return (
-    <footer>
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        {/* Footer illustration */}
-        <div
-          className="pointer-events-none absolute bottom-0 left-1/2 -z-10 -translate-x-1/2"
-          aria-hidden="true"
-        >
 
+  return (
+    <footer id="footer" className="py-16 mt-12">
+      <div className="container mx-auto max-w-6xl px-4">
+        <div className="flex w-full justify-between">
+          <div className="w-full sm:w-1/2 lg:w-1/3">
+            <img src="images/logo.png" alt="Mystic AI Logo" className="mb-4" />
+            <div className="flex space-x-4">
+              <a href="https://x.com/PepecoinNetwork">
+                <img
+                  className="social-logos"
+                  src="images/x-twitter-brands-solid.svg"
+                  alt="Link to Mystic AI Twitter"
+                />
+              </a>
+              <a href="#">
+                <img
+                  className="social-logos"
+                  src="images/telegram-brands-solid.svg"
+                  alt="Link to Mystic AI Telegram"
+                />
+              </a>
+              <a href="#">
+                <img
+                  className="social-logos"
+                  src="images/discord-brands-solid.svg"
+                  alt="Link to Mystic AI Discord"
+                />
+              </a>
+            </div>
+          </div>
+
+          <div className="w-full sm:w-1/2 lg:w-1/3 mt-16 text-right">
+            <ul className="space-y-2">
+              <li>
+                <a href="#" className="text-gray-1000 hover:text-gray-400">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-1000 hover:text-gray-400">
+                  Terms & Conditions
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div className="footer-main-div">
-          {/* 1st block */}
-          <div className="footer-child-div space-y-2">
-            <h3 className="font-semibold text-sm text-white hover:text-yellow-1000">Whitepaper</h3>
-          </div>
-          {/* 2nd block */}
-          <div className="footer-child-div space-y-2">
-            <h3 className="font-semibold text-sm text-white hover:text-yellow-1000">Privacy Policy</h3>
-          </div>
-          {/* 3rd block */}
-          <div className="footer-child-div space-y-2">
-            <h3 className="font-semibold text-sm text-white hover:text-yellow-1000">Terms and Conditions</h3>
-          </div>
-          <div className="copyright">
-            <h3 className="font-thin text-sm text-gray-1000">Copyright | All Rights Reserved</h3>
-          </div>
+
+        <div className="mt-4 border-t border-gray-1100 pt-4 text-center text-sm">
+          <h3 className="font-thin text-sm text-gray-1000">
+            Copyright &copy; 2024 | All Rights Reserved.
+          </h3>
         </div>
       </div>
     </footer>
+
+
+
   );
 }
