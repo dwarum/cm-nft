@@ -6,7 +6,7 @@
 
 
 :root {
-  --background: #191A1C;
+  --background:#000;
   --foreground: #bdbec1;
 }
 
@@ -19,7 +19,8 @@
 
 @font-face {
   font-family: customFont;
-  src: url("../public/fonts/Magical.ttf");
+  /* src: url("../public/fonts/Magical.ttf"); */
+  src: url("../public/fonts/bluu-next/BluuNext-Titling.otf");
 }
 
 
@@ -83,7 +84,6 @@ body {
   
   html,
   body { height: 100%;position:relative;  }
-  h1,
   h2,
   h3,
   h4,
@@ -94,6 +94,10 @@ body {
     font-family: 'Poppins', sans-serif;
     color: #fff;
     font-weight: 400;
+  }
+
+  h1{
+    font-family: customFont;
   }
 
   #__next {
@@ -210,6 +214,29 @@ body {
     font-size: 40px;
     font-weight: 600;
   }
+
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+  
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+  
+  .typewriter {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap; /* Keeps the text on one line */
+    animation: typing 5s steps(30, end);
+  }
+  
   /*END SECTION TITLE DESIGN*/
   /*START SCROLL TO TOP*/
   .topcontrol {
@@ -462,7 +489,7 @@ body {
     object-fit: cover;
   }
   .backgroundImage {
-    background-image: url("/images/blk-moon/moon2.jpg"); 
+    background-image: url("/images/bg-img.jpg"); 
     background-repeat: no-repeat;
     background-size: cover;
     animation: moveBackground 30s linear infnite;

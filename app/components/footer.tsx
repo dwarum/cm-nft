@@ -3,27 +3,27 @@
 export default function Footer() {
 
   return (
-    <footer id="footer" className="py-16 mt-12">
+    <footer id="footer" className="py-4 mt-16 bg-[#191A1C]">
       <div className="container mx-auto max-w-6xl px-4">
         <div className="flex w-full justify-between">
           <div className="w-full sm:w-1/2 lg:w-1/3">
             <img src="images/logo.png" alt="Mystic AI Logo" className="mb-4" />
             <div className="flex space-x-4">
-              <a href="https://x.com/PepecoinNetwork">
+              <a href="https://x.com/mysticAI">
                 <img
                   className="social-logos"
                   src="images/x-twitter-brands-solid.svg"
                   alt="Link to Mystic AI Twitter"
                 />
               </a>
-              <a href="#">
+              <a href="https://t.me/MysticAIGroup">
                 <img
                   className="social-logos"
                   src="images/telegram-brands-solid.svg"
                   alt="Link to Mystic AI Telegram"
                 />
               </a>
-              <a href="#">
+              <a href="https://mystic.ai/discord">
                 <img
                   className="social-logos"
                   src="images/discord-brands-solid.svg"

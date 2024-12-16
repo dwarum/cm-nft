@@ -26,16 +26,22 @@ export default function Header() {
   const isWhitepaperPage = pathname === "/whitepaper";
 
   return (
-    <nav id="header" className={`px-4 py-3 fixed top-0 left-0 w-full z-50 ${
-      isWhitepaperPage ? "nav-scroll"
+    <nav id="header" className={`px-4 py-2 fixed top-0 left-0 w-full z-50 ${isWhitepaperPage ? "nav-scroll"
       :
       isScrolled ? 'nav-scroll' : 'bg-transparent'
       }`}>
       <div className="container mx-auto flex justify-between">
-        {/* Logo */}
-        <a className="navbar-brand" href="#">
+        {/* Vertical Logo */}
+        <div className="flex flex-col items-center">
+          <img src="images/logo-v.png" alt="Logo" className="w-12 h-12" />
+          <span className="text-white text-md font-[customFont]">Mystic AI</span>
+        </div>
+        
+        {/* Horizontal Logo */}
+        {/* <div className="flex flex-col items-center">
+          <img src="images/logo-h.png" alt="Logo" className="w-55 h-16" />
+        </div> */}
 
-          <img src="images/logo.png" alt="" /></a>
         {/* Hamburger Menu */}
         <button
           className="md:hidden focus:outline-none" onClick={() => setIsOpen(!isOpen)}>
@@ -58,23 +64,23 @@ export default function Header() {
         <div className="hidden md:flex md:items-right md:space-x-20">
 
           <div className="hidden md:flex md:items-center md:space-x-6">
-            <a href="/" className="text-md text-white hover:text-yellow-1000" >
+            <a href="/" className="text-white hover:text-yellow-1000" >
               Home
             </a>
             {/* <a href="#about" className="text-md text-white hover:text-yellow-1000">
             About
           </a> */}
-            <a href="#services" className="text-md text-white hover:text-yellow-1000">
+            <a href="#services" className="text-white hover:text-yellow-1000">
               Features
             </a>
-            <a href="/whitepaper" className="text-md text-white hover:text-yellow-1000">
+            <a href="/whitepaper" className="text-white hover:text-yellow-1000">
               Whitepaper
             </a>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex md:items-center md:space-x-6">
-            <a href="https://x.com/mystic">
+            <a href="https://x.com/mysticAI">
               <img
                 className="nav-social-logos"
                 src="images/x-twitter-brands-solid.svg"
@@ -96,7 +102,7 @@ export default function Header() {
               />
             </a>
             <a
-              className="btn group sm:w-auto bg-white text-black font-semibold text-sm 
+              className="btn group sm:w-auto bg-white text-black font-semibold text-md 
                     hover:bg-opacity-80 hover:text-black"
               href="#intro"
             >

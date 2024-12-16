@@ -4,7 +4,7 @@ import Footer from "../components/footer";
 export default function Whitepaper() {
   return (
     <main className="flex flex-col row-start-2 items-center sm:items-start">
-      <section id="introduction" className="flex px-4 py-12 md:pt-24 md:pb-20 w-full justify-center items-center  bg-slate-200 text-[#191A1C]">
+      <section id="introduction" className="flex px-4 py-12 md:pt-24 md:pb-20 w-full justify-center items-center  bg-zinc-300 text-[#191A1C]">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 w-full">
           <div className="mx-auto pb-12 md:pb-20 space-y-6 text-left">
             <div className="inline-flex items-center gap-3 pb-3">
