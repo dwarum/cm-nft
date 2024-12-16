@@ -7,13 +7,13 @@
 
 :root {
   --background:#000;
-  --foreground: #bdbec1;
+  --foreground: #ffedd5;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #191A1C;
-    --foreground: #bdbec1;
+    --foreground: #ffedd5;
   }
 }
 
@@ -489,7 +489,7 @@ body {
     object-fit: cover;
   }
   .backgroundImage {
-    background-image: url("/images/bg-img.jpg"); 
+    background-image: url("/images/bg-img-2.jpg"); 
     background-repeat: no-repeat;
     background-size: cover;
     animation: moveBackground 30s linear infnite;
@@ -593,7 +593,7 @@ body {
   .sblr{border-right: 0px;border-left: 0px;}
   }
   .service-icon span {
-    color: #f0bb62;  /* #7f1d1d; */
+    color: #a16207;  /* #7f1d1d; */
     display: inline-block;
     font-size:50px;
     margin-bottom: 25px;
@@ -611,6 +611,7 @@ body {
     font-weight: 700;
     margin: 0 0 15px;
     text-transform: capitalize;
+    color:#a16207;
   }
   .serviceBox .service-no{
       display: inline-block;

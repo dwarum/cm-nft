@@ -4,9 +4,9 @@ export default function Offerings() {
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 w-full">
         <div className="mx-auto pb-12 md:pb-20 space-y-6 text-center">
           <div className="inline-flex items-center gap-3 pb-3
-            before:h-px before:w-8 before:bg-gradient-to-r before:from-transparent before:to-yellow-1000 
-            after:h-px after:w-8 after:bg-gradient-to-l after:from-transparent after:to-yellow-1000">
-            <h2 className="bg-clip-text font-nacelle text-white text-3xl font-semibold md:text-4xl">
+            before:h-px before:w-8 before:bg-gradient-to-r before:from-transparent before:to-yellow-700 
+            after:h-px after:w-8 after:bg-gradient-to-l after:from-transparent after:to-yellow-700">
+            <h2 className="bg-clip-text font-nacelle text-yellow-700 text-3xl font-semibold md:text-4xl">
               What is in store
             </h2>
           </div>

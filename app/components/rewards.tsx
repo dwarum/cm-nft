@@ -107,27 +107,27 @@ export default function Rewards() {
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 w-full">
         <div className="mx-auto pb-12 md:pb-20 space-y-6 text-center">
           <div className="inline-flex items-center gap-3 pb-3
-            before:h-px before:w-8 before:bg-gradient-to-r before:from-transparent before:to-yellow-1000 
-            after:h-px after:w-8 after:bg-gradient-to-l after:from-transparent after:to-yellow-1000">
-            <h2 className="bg-clip-text font-nacelle text-white text-3xl font-semibold md:text-4xl">
+            before:h-px before:w-8 before:bg-gradient-to-r before:from-transparent before:to-yellow-700 
+            after:h-px after:w-8 after:bg-gradient-to-l after:from-transparent after:to-yellow-700">
+            <h2 className="bg-clip-text font-nacelle text-yellow-700 text-3xl font-semibold md:text-4xl">
               How can you join
             </h2>
           </div>
           <p className="text-lg text-center">
-            Mint your <span className='text-yellow-1000'>NFTs</span> and join the clan. Ask more and earn more NFTs for additional features.
+            Mint your <span className='text-yellow-700'>NFTs</span> and join the clan. Ask more and earn more NFTs for additional features.
             <br />
-            As pioneers, you'll receive <span className='text-yellow-1000'>$MYSTC</span> token airdrop at our launch and life-time access to Mystic AI.
+            As pioneers, you'll receive <span className='text-yellow-700'>$MYSTC</span> token airdrop at our launch and life-time access to Mystic AI.
             You stake and earn. We will buy-back and burn.
           </p>
           <p className="space-x-2 pt-8">
             <button
-              className="inline-block border-2 border-yellow-1000 text-white font-semibold py-2 px-4 
-            rounded hover:bg-yellow-1000 hover:text-black transition duration-300">
+              className="inline-block border-2 border-yellow-700 text-orange-100 font-semibold py-2 px-4 
+            rounded hover:bg-yellow-700 hover:text-black transition duration-300">
               Mint on Magic Eden
             </button>
             <button
-              className="inline-block border-2 border-yellow-1000 text-white font-semibold py-2 px-4 
-            rounded hover:bg-yellow-1000 hover:text-black transition duration-300">
+              className="inline-block border-2 border-yellow-700 text-orange-100 font-semibold py-2 px-4 
+            rounded hover:bg-yellow-700 hover:text-black transition duration-300">
               Buy $MYSTC
             </button>
           </p>

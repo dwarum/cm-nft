@@ -15,7 +15,7 @@ export default function Background() {
         <div className="flex flex-col items-center text-center space-y-4">
           {/* Main Heading */}
           <div data-aos="zoom-in-down" data-aos-delay="0">
-            <h1 className="text-yellow-1000 text-4xl md:text-[90px] font-bold leading-tight">
+            <h1 className="text-orange-100 text-4xl md:text-[90px] font-bold leading-tight">
               Mystic AI
             </h1>
           </div>
@@ -23,7 +23,7 @@ export default function Background() {
 
           {/* Subheading */}
           <div data-aos="zoom-in-up" data-aos-delay="400">
-            <p className="font-[customFont] text-white text-lg md:text-2xl max-w-3xl">
+            <p className="font-[customFont] text-orange-100 text-lg md:text-2xl max-w-3xl">
               Blending the ancient wisdom of Vedic Astrology with AI Agent on Solana
             </p>
           </div>
@@ -31,7 +31,7 @@ export default function Background() {
           {/* Subtitle with Typewriter Animation */}
           
           <div data-aos="fade-up" data-aos-delay="700">
-            <p className="font-[customFont] text-white text-3xl md:text-[55px] leading-tight">
+            <p className="font-[customFont] text-yellow-700 text-3xl md:text-[55px] leading-tight">
               Unlock Your Cosmic Conspiracy
             </p>
           </div>
@@ -39,8 +39,8 @@ export default function Background() {
           {/* Learn More Button */}
           <div data-aos="fade-up" data-aos-delay="900">
             <a
-              className="btn inline-block px-6 py-3 border-2 border-yellow-1000 text-yellow-1000 font-semibold text-sm 
-              hover:bg-yellow-1000 hover:text-black transition duration-300 rounded"
+              className="btn inline-block px-6 py-3 border-2 border-yellow-700 text-orange-100 font-semibold text-sm 
+              hover:bg-yellow-700 hover:text-black transition duration-300"
               href="#intro"
             >
               Learn More

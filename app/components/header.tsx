@@ -32,15 +32,15 @@ export default function Header() {
       }`}>
       <div className="container mx-auto flex justify-between">
         {/* Vertical Logo */}
-        <div className="flex flex-col items-center">
-          <img src="images/logo-v.png" alt="Logo" className="w-12 h-12" />
-          <span className="text-white text-md font-[customFont]">Mystic AI</span>
-        </div>
+        {/* <div className="flex flex-col items-center">
+          <img src="images/logo-v-1.png" alt="Logo" className="w-12 h-12" />
+          <span className="text-orange-100 text-lg font-[customFont]">Mystic AI</span>
+        </div> */}
         
         {/* Horizontal Logo */}
-        {/* <div className="flex flex-col items-center">
-          <img src="images/logo-h.png" alt="Logo" className="w-55 h-16" />
-        </div> */}
+        <div className="flex flex-col items-center">
+          <img src="images/logo-h-1.png" alt="Logo" className="w-55 h-16" />
+        </div>
 
         {/* Hamburger Menu */}
         <button
@@ -64,16 +64,16 @@ export default function Header() {
         <div className="hidden md:flex md:items-right md:space-x-20">
 
           <div className="hidden md:flex md:items-center md:space-x-6">
-            <a href="/" className="text-white hover:text-yellow-1000" >
+            <a href="/" className="hover:text-yellow-700" >
               Home
             </a>
-            {/* <a href="#about" className="text-md text-white hover:text-yellow-1000">
+            {/* <a href="#about" className="text-md text-white hover:text-yellow-700">
             About
           </a> */}
-            <a href="#services" className="text-white hover:text-yellow-1000">
+            <a href="#services" className="hover:text-yellow-700">
               Features
             </a>
-            <a href="/whitepaper" className="text-white hover:text-yellow-1000">
+            <a href="/whitepaper" className="hover:text-yellow-700">
               Whitepaper
             </a>
           </div>
@@ -102,7 +102,7 @@ export default function Header() {
               />
             </a>
             <a
-              className="btn group sm:w-auto bg-white text-black font-semibold text-md 
+              className="btn group sm:w-auto bg-[#ffedd5] text-black font-semibold text-md 
                     hover:bg-opacity-80 hover:text-black"
               href="#intro"
             >
@@ -119,22 +119,22 @@ export default function Header() {
         className={`${isOpen ? "block" : "hidden"
           } md:hidden flex flex-col space-y-2 mt-2`}
       >
-        <a href="#home" className="text-sm text-white hover:text-yellow-1000" >
+        <a href="#home" className="text-sm text-white hover:text-yellow-700" >
           Home
         </a>
-        <a href="#about" className="text-sm text-white hover:text-yellow-1000">
+        <a href="#about" className="text-sm text-white hover:text-yellow-700">
           About
         </a>
-        <a href="#services" className="text-sm text-white hover:text-yellow-1000">
+        <a href="#services" className="text-sm text-white hover:text-yellow-700">
           Features
         </a>
-        <a href="#contact" className="text-sm text-white hover:text-yellow-1000">
+        <a href="#contact" className="text-sm text-white hover:text-yellow-700">
           Whitepaper
         </a>
-        <a href="#contact" className="text-sm text-white hover:text-yellow-1000">
+        <a href="#contact" className="text-sm text-white hover:text-yellow-700">
           X
         </a>
-        <a href="#contact" className="text-sm text-white hover:text-yellow-1000">
+        <a href="#contact" className="text-sm text-white hover:text-yellow-700">
           Tel
         </a>
         <a href="#contact" className="text-sm text-white">

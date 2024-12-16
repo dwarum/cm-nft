@@ -4,7 +4,7 @@ import Footer from "../components/footer";
 export default function Whitepaper() {
   return (
     <main className="flex flex-col row-start-2 items-center sm:items-start">
-      <section id="introduction" className="flex px-4 py-12 md:pt-24 md:pb-20 w-full justify-center items-center  bg-zinc-300 text-[#191A1C]">
+      <section id="introduction" className="flex px-4 py-12 md:pt-24 md:pb-20 w-full justify-center items-center  bg-orange-100 text-[#191A1C]">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 w-full">
           <div className="mx-auto pb-12 md:pb-20 space-y-6 text-left">
             <div className="inline-flex items-center gap-3 pb-3">
@@ -39,28 +39,28 @@ export default function Whitepaper() {
               </h3>
 
               <p>
-                <span className='text-yellow-1000 font-semibold'>Precision and Accuracy:</span>Due to the vast amount of data and numerous combinations and possibilities,
+                <span className='text-yellow-700 font-semibold'>Precision and Accuracy:</span>Due to the vast amount of data and numerous combinations and possibilities,
                 along with time constraints, astrologers sometimes make overly narrow predictions and miss out on
                 precision. AI can process large datasets and identify patterns that might be missed by human astrologers,
                 offering more precise and accurate readings.
               </p>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Convenience and Accessibility:</span> In today's world, scheduling a consultation with an astrologer requires making
+                <span className='text-yellow-700 font-semibold'>Convenience and Accessibility:</span> In today's world, scheduling a consultation with an astrologer requires making
                 an appointment, which may not be available when needed. AI-driven tools provide instant access to astrological
                 insights, making it more convenient for users to get guidance whenever they need it from wherever they need it.
               </p>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Efficiency and Speed:</span> Astrologers may be unwilling or unable to spend the required time and effort for an
+                <span className='text-yellow-700 font-semibold'>Efficiency and Speed:</span> Astrologers may be unwilling or unable to spend the required time and effort for an
                 in-depth analysis, as it can be difficult and time-consuming. In contrast, AI can process data more quickly
                 and deliver results faster
               </p>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Shared Value and Rewards:</span> Current platforms use user data for advertising and their own learning without
+                <span className='text-yellow-700 font-semibold'>Shared Value and Rewards:</span> Current platforms use user data for advertising and their own learning without
                 providing additional value to users beyond the service. In contrast, our ask-to-earn model offers the
                 opportunity to earn our utility token ($MYSTC) and NFTs of different rarities as the users engage actively with Mystic AI.
               </p>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Innovation and Trust:</span> Combining Vedic astrology with AI can convey a sense of innovation while maintaining
+                <span className='text-yellow-700 font-semibold'>Innovation and Trust:</span> Combining Vedic astrology with AI can convey a sense of innovation while maintaining
                 a connection to a trusted, time-honored tradition.
               </p>
             </div>
@@ -134,18 +134,18 @@ export default function Whitepaper() {
                 Utilities
               </h3>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Token Staking:</span> As a token of our appreciation to your commitment, we will
+                <span className='text-yellow-700 font-semibold'>Token Staking:</span> As a token of our appreciation to your commitment, we will
                 reward you directly proportional to the amount of $MYSTC you stake. The more you stake, the greater your potential earnings.
               </p>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Reward Programs:</span> As our user base grows, we will reward a percentage of
+                <span className='text-yellow-700 font-semibold'>Reward Programs:</span> As our user base grows, we will reward a percentage of
                 tokens back through frequent Reward Programs.
               </p>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Loyalty Rewards:</span> Exclusive cashbacks for $MYSTC token holders
+                <span className='text-yellow-700 font-semibold'>Loyalty Rewards:</span> Exclusive cashbacks for $MYSTC token holders
               </p>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Premium Programs:</span> Access to Premium programs offering tiered rewards based
+                <span className='text-yellow-700 font-semibold'>Premium Programs:</span> Access to Premium programs offering tiered rewards based
                 on accumulated token holdings, fostering loyalty and retention among high-value users.
               </p>
               <p>
@@ -157,27 +157,27 @@ export default function Whitepaper() {
                 Tokenomics
               </h3>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Distribution:</span>
+                <span className='text-yellow-700 font-semibold'>Distribution:</span>
               </p>
               <h3 className="text-black font-semibold text-xl md:text-2xl">
                 Value Proposition
               </h3>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Token Buyback & Burn:</span> A portion of the revenue generated from our services
+                <span className='text-yellow-700 font-semibold'>Token Buyback & Burn:</span> A portion of the revenue generated from our services
                 will be used to buy $MYSTC tokens directly from the market on a regular basis. They will then be burned, reducing the total
                 supply of $MYSTC. <br />
                 Buyback and Burn program is aimed to reward your loyalty and support by contributing to the scarcity and value of $MYSTC.
               </p>
 
               <p>
-                <span className='text-yellow-1000 font-semibold'>Airdrop:</span> As we introduce new features, so we reward our pillars of support - you.
+                <span className='text-yellow-700 font-semibold'>Airdrop:</span> As we introduce new features, so we reward our pillars of support - you.
               </p>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Pioneers Reward:</span> As early adopters who believed in us and who have been
+                <span className='text-yellow-700 font-semibold'>Pioneers Reward:</span> As early adopters who believed in us and who have been
                 instrumental in shaping us, receive 5% of the total Airdrop allocation.
               </p>
               <p>
-                <span className='text-yellow-1000 font-semibold'>NFT Holders Reward:</span> NFT holders receive 10% of the total Airdrop Allocation.
+                <span className='text-yellow-700 font-semibold'>NFT Holders Reward:</span> NFT holders receive 10% of the total Airdrop Allocation.
               </p>
             </div>
 
@@ -196,11 +196,11 @@ export default function Whitepaper() {
                 Utilities
               </h3>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Privileged Access:</span> As you explore a service and stay engaged, we will reward you with
+                <span className='text-yellow-700 font-semibold'>Privileged Access:</span> As you explore a service and stay engaged, we will reward you with
                 Feature NFTs with which you can explore a different and higher-tier service.
               </p>
               <p>
-                <span className='text-yellow-1000 font-semibold'>Plus 3 Access:</span> As you earn a feature NFT, get free consultations in that feature not
+                <span className='text-yellow-700 font-semibold'>Plus 3 Access:</span> As you earn a feature NFT, get free consultations in that feature not
                 just for you but for three more horoscopes. This will keep you engaged thus making you eligible to earn NFTs for higher-tier services.
               </p>
             </div>
@@ -210,14 +210,14 @@ export default function Whitepaper() {
               <h3 className="text-black font-semibold text-xl md:text-2xl">
                 Key Features
               </h3>
-              <p className='text-yellow-1000 font-semibold'>Personal Horoscope Insights</p>
-              <p className='text-yellow-1000 font-semibold'>Relationship Guidance</p>
-              <p className='text-yellow-1000 font-semibold'>Future predictions</p>
-              <p className='text-yellow-1000 font-semibold'>Round the Clock Assistance</p>
-              <p className='text-yellow-1000 font-semibold'>Immersive Experiences</p>
-              <p className='text-yellow-1000 font-semibold'>Personal Coaching</p>
-              <p className='text-yellow-1000 font-semibold'>Astrology Learning</p>
-              <p className='text-yellow-1000 font-semibold'>Fun and Games</p>
+              <p className='text-yellow-700 font-semibold'>Personal Horoscope Insights</p>
+              <p className='text-yellow-700 font-semibold'>Relationship Guidance</p>
+              <p className='text-yellow-700 font-semibold'>Future predictions</p>
+              <p className='text-yellow-700 font-semibold'>Round the Clock Assistance</p>
+              <p className='text-yellow-700 font-semibold'>Immersive Experiences</p>
+              <p className='text-yellow-700 font-semibold'>Personal Coaching</p>
+              <p className='text-yellow-700 font-semibold'>Astrology Learning</p>
+              <p className='text-yellow-700 font-semibold'>Fun and Games</p>
             </div>
 
             {/* Ask-to-Earn */}

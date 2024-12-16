@@ -36,12 +36,12 @@ export default function Footer() {
           <div className="w-full sm:w-1/2 lg:w-1/3 mt-16 text-right">
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-1000 hover:text-gray-400">
+                <a href="#" className="text-orange-100 hover:text-white">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-1000 hover:text-gray-400">
+                <a href="#" className="text-orange-100 hover:text-white">
                   Terms & Conditions
                 </a>
               </li>
@@ -50,7 +50,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-4 border-t border-gray-1100 pt-4 text-center text-sm">
-          <h3 className="font-thin text-sm text-gray-1000">
+          <h3 className="font-thin text-sm text-orange-50">
             Copyright &copy; 2024 | All Rights Reserved.
           </h3>
         </div>
