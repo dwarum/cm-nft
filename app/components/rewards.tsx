@@ -9,62 +9,62 @@ export default function Rewards() {
     {
       name: "João da Silva",
       role: "Dev Front-end",
-      img: "/images/logo.jpg",
+      img: "/images/test/astro-ai-orange.webp",
     },
     {
       name: "Maria Santos",
       role: "Dev Back-end",
-      img: "/images/logo.png",
+      img: "/images/test/astro-ai-draft.webp",
     },
     {
       name: "Pedro Oliveira",
       role: "Dev Mobile",
-      img: "/images/logo(1).png",
+      img: "/images/test/astro-ai-cartoon.webp",
     },
     {
       name: "Ana Pereira",
       role: "Dev Front-end",
-      img: "/images/puzzle.png",
+      img: "/images/test/astro-ai-sitting.webp",
     },
     {
       name: "João da Silva",
       role: "Dev Front-end",
-      img: "/images/logo.jpg",
+      img: "/images/test/astro-ai-vibrant.webp",
     },
     {
       name: "Maria Santos",
       role: "Dev Back-end",
-      img: "/images/logo.png",
+      img: "/images/test/astro-ai.webp",
     },
     {
       name: "Pedro Oliveira",
       role: "Dev Mobile",
-      img: "/images/logo(1).png",
+      img: "/images/test/astro-ai-brown.webp",
     },
     {
       name: "Ana Pereira",
       role: "Dev Front-end",
-      img: "/images/puzzle.png",
+      img: "/images/test/astro-ai-colorful.webp",
     },
     {
       name: "João da Silva",
       role: "Dev Front-end",
-      img: "/images/logo.jpg",
+      img: "/images/test/astro-ai-cute.webp",
     },
     {
       name: "Maria Santos",
       role: "Dev Back-end",
-      img: "/images/logo.png",
+      img: "/images/test/astro-ai-sitting.webp",
     },
     {
       name: "Pedro Oliveira",
       role: "Dev Mobile",
-      img: "/images/logo(1).png",
+      img: "/images/test/astro-ai-brown.webp",
     },
     {
       name: "Ana Pereira",
       role: "Dev Front-end",
-      img: "/images/puzzle.png",
+      img: "/images/test/astro-ai.webp",
     }
   ];
 

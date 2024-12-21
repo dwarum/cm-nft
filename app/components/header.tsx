@@ -32,15 +32,15 @@ export default function Header() {
       }`}>
       <div className="container mx-auto flex justify-between">
         {/* Vertical Logo */}
-        <div className="flex flex-col items-center">
+        {/* <div className="flex flex-col items-center">
           <img src="images/logo-v.png" alt="Logo" className="w-12 h-12" />
           <span className="text-white text-md font-[customFont]">Mystic AI</span>
-        </div>
+        </div> */}
         
         {/* Horizontal Logo */}
-        {/* <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center">
           <img src="images/logo-h.png" alt="Logo" className="w-55 h-16" />
-        </div> */}
+        </div>
 
         {/* Hamburger Menu */}
         <button
