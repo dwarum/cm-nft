@@ -61,8 +61,8 @@ export default function Home() {
 
   // Candy Guard Id: 9qwfkWfdnq7Tvc9DQn4L4yveBbjSxPCc1WnVYjwMvXup
 
-  const candyMachineId = publicKey('ct4ZXaeZ4kymr29VWFKZXFgJkqP6NfRYvuDREQ3gEBT');
-  const collectionMintId = publicKey('DLLUzHTc513Y4prryh5JKuHC2CzhXUB65RoZa9qqQNWH');
+  const candyMachineId = publicKey('8sack4PDfSkHKXPoujmXTsa5QMrUvMPiFQ4FG553RNow');
+  const collectionMintId = publicKey('Eeyo6r29HUnv7V6kzzEYUnJrwRNfC8DRxkoJXqFK6i1p');
   const collectionUpdateAuthority = publicKey('A5PcHcK4HEStR3p7VspBLkM8ucqfkyWMQUUHiM4ThQWx');
 
   // stats
