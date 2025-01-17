@@ -489,10 +489,11 @@ body {
     object-fit: cover;
   }
   .backgroundImage {
-    background-image: url("/images/bg-img.jpg"); 
+    background-image: url("/images/final-7-2.png"); 
     background-repeat: no-repeat;
     background-size: cover;
     animation: moveBackground 30s linear infnite;
+    background-position: center;
   }
   /*
   * ----------------------------------------------------------------------------------------

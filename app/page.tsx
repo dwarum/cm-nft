@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import React from 'react';
 import { toast } from 'react-toastify';
 import Confetti from 'react-confetti';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 //animation imports
 import AOS from "aos";
@@ -17,6 +18,7 @@ require('./mint.css');
 
 //section imports
 import Background from "./components/background";
+import Chat from "./components/chat";
 import Offerings from "./components/offerings";
 import Rewards from "./components/rewards";
 import Team from "./components/team";
@@ -43,6 +45,24 @@ import { walletAdapterIdentity } from '@metaplex-foundation/umi-signer-wallet-ad
 import { dasApi } from '@metaplex-foundation/digital-asset-standard-api';
 
 export default function Home() {
+ 
+  const [queryClient] = useState(() => new QueryClient());
+  const [query, setQuery] = useState('');
+  const [response, setResponse] = useState('');
+
+  const handleSubmit = async () => {
+    const res = await fetch('/api/eliza', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query }),
+    });
+    const data = await res.json();
+    setResponse(data.response);
+  };
+
+
+
+
   const { connect, connected } = useWallet();
   const { setVisible } = useWalletModal();
   const [balance, setBalance] = useState<number | null>(null);
@@ -398,9 +418,10 @@ export default function Home() {
   });
 
   return (
-    // <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-    <main className="flex flex-col row-start-2 items-center sm:items-start">
+    <QueryClientProvider client={queryClient}>
+  <main className="flex flex-col row-start-2 items-center sm:items-start">
       <Background />
+      <Chat/>
 
       {/* <div className="flex gap-4 items-center flex-col sm:flex-row">
             {connected && wallet.publicKey ? (
@@ -450,6 +471,7 @@ export default function Home() {
       {/* </div> */}
 
     </main>
+    </QueryClientProvider>
     // </div>
   );
 }

@@ -16,19 +16,19 @@ export default function Team() {
                         As we continue to grow, we are excited to expand our capabilities and deliver more powerful features to our users!
                     </p>
                 </div>
-                <div className="flex flex-wrap justify-center gap-12 py-6">
-                    <div className="single-team relative rounded-lg group flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6" data-aos="zoom-in-up" data-aos-delay="0">
+                <div className="flex flex-wrap justify-center gap-48 py-6">
+                    <div className="single-team relative rounded-lg group flex-shrink-0 w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/6" data-aos="zoom-in-up" data-aos-delay="0">
                         <div className="img">
                             <img
                                 alt="image"
-                                src="/images/sagittarius-s.svg"
+                                src="/images/chart-y-y.png"
                                 className="rounded-lg w-full"
                             />
                         </div>
                         <div className="team-content">
-                            <h3>Bala Perry</h3>
-                            <p>Founder/CEO/SME</p>
-                            <p className="text-yellow-1000">Lagna Sign - Sagittarius</p>
+                            <h3>Maverick Monk</h3>
+                            <p>Founder</p>
+                            {/* <p className="text-yellow-1000">Lagna Sign - Sagittarius</p> */}
                         </div>
                     </div>
                     <div className="single-team relative rounded-lg group flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6" data-aos="zoom-in-up" data-aos-delay="500">
@@ -40,12 +40,12 @@ export default function Team() {
                             />
                         </div>
                         <div className="team-content">
-                            <h3>Ramya</h3>
-                            <p>PM/Tech Lead</p>
-                            <p className="text-yellow-1000">Lagna Sign- Libra</p>
+                            <h3>Black Goddess</h3>
+                            <p>Co Founder</p>
+                            {/* <p className="text-yellow-1000">Lagna Sign- Libra</p> */}
                         </div>
                     </div>
-                    <div className="single-team relative rounded-lg group flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6" data-aos="zoom-in-up" data-aos-delay="1000">
+                    {/* <div className="single-team relative rounded-lg group flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6" data-aos="zoom-in-up" data-aos-delay="1000">
                         <div className="img">
                             <img
                                 alt="image"
@@ -58,8 +58,8 @@ export default function Team() {
                             <p>Lead Developer AI/ML</p>
                             <p className="text-yellow-1000">Lagna Sign- Scorpio</p>
                         </div>
-                    </div>
-                    <div className="single-team relative rounded-lg group flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6" data-aos="zoom-in-up" data-aos-delay="1500">
+                    </div> */}
+                    {/* <div className="single-team relative rounded-lg group flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6" data-aos="zoom-in-up" data-aos-delay="1500">
                         <div className="img">
                             <img
                                 alt="image"
@@ -72,7 +72,7 @@ export default function Team() {
                             <p>UI/UX Developer</p>
                             <p className="text-yellow-1000">Lagna Sign- Aries</p>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </section>

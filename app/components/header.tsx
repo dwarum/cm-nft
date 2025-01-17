@@ -23,10 +23,10 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isWhitepaperPage = pathname === "/whitepaper";
+  const isNotHomePage = pathname === "/whitepaper" || "/eliza";
 
   return (
-    <nav id="header" className={`px-4 py-2 fixed top-0 left-0 w-full z-50 ${isWhitepaperPage ? "nav-scroll"
+    <nav id="header" className={`px-4 py-2 fixed top-0 left-0 w-full z-50 ${isNotHomePage ? "nav-scroll"
       :
       isScrolled ? 'nav-scroll' : 'bg-transparent'
       }`}>
@@ -39,7 +39,7 @@ export default function Header() {
         
         {/* Horizontal Logo */}
         <div className="flex flex-col items-center">
-          <img src="images/logo-h.png" alt="Logo" className="w-55 h-16" />
+          <img src="images/logo-moon-snake-5.png" alt="Logo" className="w-55 h-16" />
         </div>
 
         {/* Hamburger Menu */}
@@ -64,16 +64,16 @@ export default function Header() {
         <div className="hidden md:flex md:items-right md:space-x-20">
 
           <div className="hidden md:flex md:items-center md:space-x-6">
-            <a href="/" className="text-white hover:text-yellow-1000" >
+            <a href="/" className="text-[#ffedd5] hover:text-yellow-1000" >
               Home
             </a>
-            {/* <a href="#about" className="text-md text-white hover:text-yellow-1000">
-            About
-          </a> */}
-            <a href="#services" className="text-white hover:text-yellow-1000">
+            <a href="/eliza" className="text-md text-white hover:text-yellow-1000">
+              Ask
+            </a>
+            <a href="#services" className="text-[#ffedd5] hover:text-yellow-1000">
               Features
             </a>
-            <a href="/whitepaper" className="text-white hover:text-yellow-1000">
+            <a href="/whitepaper" className="text-[#ffedd5] hover:text-yellow-1000">
               Whitepaper
             </a>
           </div>
@@ -102,7 +102,7 @@ export default function Header() {
               />
             </a>
             <a
-              className="btn group sm:w-auto bg-white text-black font-semibold text-md 
+              className="btn group sm:w-auto bg-[#ffedd5] text-black font-semibold text-md 
                     hover:bg-opacity-80 hover:text-black"
               href="#intro"
             >
